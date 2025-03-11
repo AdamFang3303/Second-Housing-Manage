@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <script type="text/javascript" src="//api.map.baidu.com/api?v=3.0&ak=ODlfJv6m17mREL1NnROpuQwyTX8HoLKr"></script>
+    <script type="text/javascript" src="//api.map.baidu.com/library/Heatmap/2.0/src/Heatmap_min.js"></script>
+    <title>房价热力图</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 0;
+            margin-bottom: 20px;
+        }
+        .content {
+            margin: 20px;
+        }
+        .back-button {
+            display: inline-block;
+            margin: 10px;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        .back-button:hover {
+            background-color: #45a049;
+        }
+        #container {
+            width: 100%;
+            height: 500px;
+            margin: 20px auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>房价热力图</h1>
+        <a href="index.html" class="back-button">返回主界面</a>
+    </div>
+    <div class="content">
+        <h2>房价热力图页面</h2>
+        <p>在这里展示房价热力图。</p>
+        <!-- 热力图容器 -->
+        <div id="container"></div>
+        <div id="r-result">
+            <input type="button" onclick="openHeatmap();" value="显示热力图"/>
+            <input type="button" onclick="closeHeatmap();" value="关闭热力图"/>
+        </div>
+        <script type="text/javascript">
+            // 初始化地图
+            var map = new BMap.Map("container");
+            var centerPoint = new BMap.Point(120.1616, 30.2389); // 杭州中心点
+            map.centerAndZoom(centerPoint, 12);
+            map.enableScrollWheelZoom(true);
+    
+            // 加载数据
+            var points = [];
+            fetch('D:\Code\Demo\data\杭州小区数据_带坐标.json')
+                .then(response => response.json())
+                .then(data => {
+                    data.forEach(item => {
+                        points.push({
+                            lng: parseFloat(item.经度),
+                            lat: parseFloat(item.纬度),
+                            count: parseFloat(item.均价)
+                        });
+                    });
+                    initHeatmap(points);
+                })
+                .catch(error => {
+                    console.error('加载数据失败:', error);
+                    alert('加载数据失败，请检查数据文件路径和内容');
+                });
+    
+            // 初始化热力图
+            function initHeatmap(data) {
+                heatmapOverlay = new BMapLib.HeatmapOverlay({"radius":20});
+                map.addOverlay(heatmapOverlay);
+                heatmapOverlay.setDataSet({data: data, max: Math.max(...data.map(d => d.count))});
+            }
+    
+            // 显示热力图
+            function openHeatmap() {
+                heatmapOverlay.show();
+            }
+    
+            // 关闭热力图
+            function closeHeatmap() {
+                heatmapOverlay.hide();
+            }
+    
+            // 判断浏览器是否支持 canvas
+            function isSupportCanvas() {
+                var elem = document.createElement('canvas');
+                return !!(elem.getContext && elem.getContext('2d'));
+            }
+    
+            // 检查浏览器是否支持 canvas
+            if (!isSupportCanvas()) {
+                alert('热力图目前只支持有 canvas 支持的浏览器，您所使用的浏览器不能使用热力图功能~');
+            }
+        </script>
+    </div>
+</body>
+</html>
+        
