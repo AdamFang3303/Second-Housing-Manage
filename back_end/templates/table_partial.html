@@ -1,0 +1,36 @@
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>房屋链接</th>
+            <th>房屋地址</th>
+            <th>房屋类型</th>
+            <th>面积</th>
+            <th>朝向</th>
+            <th>装修</th>
+            <th>楼层</th>
+            <th>年份</th>
+            <th>房屋类别</th>
+            <th>价格</th>
+            <th>城市</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for house in houses %}
+        <tr>
+            <td>{{ house.id }}</td>
+            <td><a href="{{ house.house_info_link }}" target="_blank">点击前往链家页面</a></td>
+            <td>{{ house.house_address }}</td>
+            <td>{{ house.house_type }}</td>
+            <td>{{ house.house_area }}</td>
+            <td>{{ house.orientation }}</td>
+            <td>{{ house.decoration }}</td>
+            <td>{{ house.floor }}</td>
+            <td>{{ house.year }}</td>
+            <td>{{ house.house_category }}</td>
+            <td>{{ house.price }}</td>
+            <td>{{ house.city }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>

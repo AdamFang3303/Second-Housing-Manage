@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>数据查询</title>
+    <title>小区数据查询</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -74,88 +74,59 @@
         tr:nth-child(even) {
             background-color: #f9f9f9;
         }
-        a {
-            color: blue;
-            text-decoration: none;
-        }
-        a:hover {
-            text-decoration: underline;
-        }
     </style>
 </head>
 <body>
     <div class="header">
-        <h1>数据查询</h1>
+        <h1>小区数据查询</h1>
         <a href="/" class="back-button">返回主界面</a>
     </div>
     <div class="content">
-        <h2>数据查询页面</h2>
-        <form method="POST" action="/query">
-            <input type="text" name="name" placeholder="输入小区名或关键词">
-            <input type="text" name="street" placeholder="输入街道">
-            <input type="number" name="min_price" placeholder="最低价格">
-            <input type="number" name="max_price" placeholder="最高价格">
-            <input type="number" name="min_area" placeholder="最小面积">
-            <input type="number" name="max_area" placeholder="最大面积">
-            <select name="decoration">
-                <option value="">装修类型</option>
-                <option value="精装">精装</option>
-                <option value="毛坯">毛坯</option>
+        <h2>小区数据查询页面</h2>
+        <form method="POST" action="/estate_query">
+            <input type="text" name="name" placeholder="输入小区名">
+            <input type="number" name="min_average_price" placeholder="最小均价">
+            <input type="number" name="max_average_price" placeholder="最大均价">
+            <input type="number" name="min_listings" placeholder="最小在售套数">
+            <input type="number" name="max_listings" placeholder="最大在售套数">
+            <select name="district">
+                <option value="">所在区</option>
+                <option value="钱塘区">钱塘区</option>
+                <option value="临平区">临平区</option>
+                <option value="桐庐">桐庐</option>
+                <option value="滨江">滨江</option>
+                <option value="萧山">萧山</option>
+                <option value="西湖">西湖</option>
+                <option value="上城">上城</option>
+                <option value="淳安">淳安</option>
+                <option value="临安区">临安区</option>
+                <option value="余杭">余杭</option>
             </select>
-            <select name="building_type">
-                <option value="">建筑类型</option>
-                <option value="塔楼">塔楼</option>
-                <option value="板楼">板楼</option>
-                <option value="板塔结合">板塔结合</option>
-            </select>
-            <input type="number" name="min_year" placeholder="最小年份">
-            <input type="number" name="max_year" placeholder="最大年份">
-            <select name="direction">
-                <option value="">朝向</option>
-                <option value="东">东</option>
-                <option value="南">南</option>
-                <option value="西">西</option>
-                <option value="北">北</option>
-            </select>
+            <input type="text" name="street" placeholder="街道">
             <input type="submit" value="查询">
         </form>
-        <form method="GET" action="/query">
-            <input type="submit" value="清空筛选">
-        </form>
-        <button id="sortButton" onclick="changeSort()">默认排序</button>
+        <button id="sortButton">默认排序</button>
         <div id="results">
             <table>
                 <thead>
                     <tr>
                         <th>ID</th>
-                        <th>房屋链接</th>
-                        <th>房屋地址</th>
-                        <th>房屋类型</th>
-                        <th>面积</th>
-                        <th>朝向</th>
-                        <th>装修</th>
-                        <th>楼层</th>
-                        <th>年份</th>
-                        <th>房屋类别</th>
-                        <th>价格</th>
-                        <th>城市</th>
+                        <th>小区名称</th>
+                        <th>均价/元</th>
+                        <th>在售套数</th>
+                        <th>所在区</th>
+                        <th>街道</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {% for house in houses %}
+                    {% for estate in estates %}
                     <tr>
-                        <td>{{ house.id }}</td>
-                        <td><a href="{{ house.house_info_link }}" target="_blank">点击前往链家页面</a></td>
-                        <td>{{ house.house_address }}</td>
-                        <td>{{ house.house_type }}</td>
-                        <td>{{ house.house_area }}</td>
-                        <td>{{ house.orientation }}</td>
-                        <td>{{ house.decoration }}</td>
-                        <td>{{ house.floor }}</td>
-                        <td>{{ house.year }}</td>
-                        <td>{{ house.house_category }}</td>
-                        <td>{{ house.price }}</td>
-                        <td>{{ house.city }}</td>
+                        <td>{{ estate.id }}</td>
+                        <td>{{ estate.estate_name }}</td>
+                        <td>{{ estate.average_price }}</td>
+                        <td>{{ estate.listings }}</td>
+                        <td>{{ estate.district }}</td>
+                        <td>{{ estate.street }}</td>
                     </tr>
                     {% endfor %}
                 </tbody>
@@ -186,12 +157,15 @@
             document.getElementById('sortButton').textContent = buttonLabel;
     
             // 发送请求到后端，并请求只返回表格部分
-            fetch(`/query?sort=${sortType}&partial=true`)
+            fetch(`/estate_query?sort=${sortType}&partial=true`)
                 .then(response => response.text())
                 .then(html => {
                     document.getElementById('results').innerHTML = html;
                 });
         }
+    
+        // 绑定按钮点击事件
+        document.getElementById('sortButton').addEventListener('click', changeSort);
     </script>
 </body>
 </html>

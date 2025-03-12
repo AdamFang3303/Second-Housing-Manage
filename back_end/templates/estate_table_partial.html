@@ -1,0 +1,24 @@
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>小区名称</th>
+            <th>均价/元</th>
+            <th>在售套数</th>
+            <th>所在区</th>
+            <th>街道</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for estate in estates %}
+        <tr>
+            <td>{{ estate.id }}</td>
+            <td>{{ estate.estate_name }}</td>
+            <td>{{ estate.average_price }}</td>
+            <td>{{ estate.listings }}</td>
+            <td>{{ estate.district }}</td>
+            <td>{{ estate.street }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
