@@ -174,5 +174,9 @@ def estate_query():
 def heat_map():
     return render_template('heat_map.html')
 
+@app.route('/statistic')
+def statistic():
+   return render_template('statistic.html') 
+
 if __name__ == '__main__':
     app.run(debug=True)

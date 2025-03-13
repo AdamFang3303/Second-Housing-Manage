@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>数据统计系统</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 0;
+            margin-bottom: 20px;
+        }
+        .content {
+            margin: 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            padding: 0 20px;
+        }
+        .chart-container {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 15px;
+            transition: transform 0.3s ease;
+            cursor: pointer;
+        }
+        .chart-container:hover {
+            transform: translateY(-5px);
+        }
+        .chart-img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            border-radius: 4px;
+        }
+        .chart-title {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #333;
+        }
+        .back-button {
+            display: inline-block;
+            margin: 10px;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        .back-button:hover {
+            background-color: #45a049;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            overflow: auto;
+        }
+        .modal-content {
+            max-width: 90%;
+            max-height: 90%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-img {
+            width: auto;
+            height: auto;
+            max-width: 100%;
+            max-height: 100%;
+            border-radius: 8px;
+        }
+        .close-btn {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            color: white;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>数据统计系统</h1>
+        <a href="{{ url_for('index') }}" class="back-button">返回主界面</a>
+    </div>
+    <div class="content">
+        <div class="chart-container" onclick="showOriginalImage(this)">
+            <img src="{{ url_for('static', filename='Graphs/下载.png') }}" alt="统计图表" class="chart-img">
+            <div class="chart-title"></div>
+        </div>
+        <div class="chart-container" onclick="showOriginalImage(this)">
+            <img src="{{ url_for('static', filename='Graphs/下载 (1).png') }}" alt="统计图表" class="chart-img">
+            <div class="chart-title"></div>
+        </div>
+        <div class="chart-container" onclick="showOriginalImage(this)">
+            <img src="{{ url_for('static', filename='Graphs/下载 (2).png') }}" alt="统计图表" class="chart-img">
+            <div class="chart-title"></div>
+        </div>
+        <div class="chart-container" onclick="showOriginalImage(this)">
+            <img src="{{ url_for('static', filename='Graphs/下载 (3).png') }}" alt="统计图表" class="chart-img">
+            <div class="chart-title"></div>
+        </div>
+        <div class="chart-container" onclick="showOriginalImage(this)">
+            <img src="{{ url_for('static', filename='Graphs/下载 (4).png') }}" alt="统计图表" class="chart-img">
+            <div class="chart-title"></div>
+        </div>
+        <div class="chart-container" onclick="showOriginalImage(this)">
+            <img src="{{ url_for('static', filename='Graphs/下载 (5).png') }}" alt="统计图表" class="chart-img">
+            <div class="chart-title"></div>
+        </div>
+        <div class="chart-container" onclick="showOriginalImage(this)">
+            <img src="{{ url_for('static', filename='Graphs/下载 (6).png') }}" alt="统计图表" class="chart-img">
+            <div class="chart-title"></div>
+        </div>
+        <div class="chart-container" onclick="showOriginalImage(this)">
+            <img src="{{ url_for('static', filename='Graphs/下载 (7).png') }}" alt="统计图表" class="chart-img">
+            <div class="chart-title"></div>
+        </div>
+    </div>
+
+    <!-- 模态框用于显示原图 -->
+    <div class="modal" id="imageModal">
+        <span class="close-btn" onclick="closeModal()">&times;</span>
+        <div class="modal-content">
+            <img class="modal-img" id="modalImage">
+        </div>
+    </div>
+
+    <script>
+        const modal = document.getElementById('imageModal');
+        const modalImage = document.getElementById('modalImage');
+
+        function showOriginalImage(container) {
+            const img = container.querySelector('img');
+            modalImage.src = img.src;
+            modal.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            modal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        modal.addEventListener('click', function(event) {
+            if (event.target === modal) {
+                closeModal();
+            }
+        });
+
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                closeModal();
+            }
+        });
+
+        modal.addEventListener('wheel', function(event) {
+            event.stopPropagation();
+        });
+    </script>
+</body>
+</html>
